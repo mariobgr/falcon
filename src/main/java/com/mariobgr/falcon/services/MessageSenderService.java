@@ -30,11 +30,11 @@ public class MessageSenderService {
         Random rand = new Random();
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
-        MessageModel message = new MessageModel("This is a message", rand.nextInt(), timestamp.toString());
+        MessageModel message = new MessageModel("This is a message", rand.nextInt(), timestamp.toString(), -1);
 
         rabbitTemplate.convertAndSend(RabbitConfig.EXCHANGE_TOPIC_NAME, RabbitConfig.EXCHANGE_KEY_NAME, message);
 
-        logger.info("Message sent at " + timestamp.toString());
+        logger.info("Message automatically sent at " + timestamp.toString());
 
     }
 

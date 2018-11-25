@@ -19,10 +19,9 @@ public class DataSourceConfig {
     public DataSource dataSource() {
 
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        //dataSource.setDriverClassName("com.mysql.jdbc.Driver");
         dataSource.setUrl("jdbc:mysql://localhost/falcondb");
         dataSource.setUsername("falcon");
-        dataSource.setPassword("falcon123");
+        dataSource.setPassword("falcon123"); //
 
         return dataSource;
     }

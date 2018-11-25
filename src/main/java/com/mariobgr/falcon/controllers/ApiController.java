@@ -1,5 +1,6 @@
 package com.mariobgr.falcon.controllers;
 
+import com.mariobgr.falcon.dao.MessageDao;
 import com.mariobgr.falcon.models.MessageModel;
 import com.mariobgr.falcon.services.RabbitWriterService;
 import com.mariobgr.falcon.services.RedisWriterService;
@@ -8,12 +9,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-@Controller
+@RestController
 @RequestMapping("/api")
 public class ApiController {
 
@@ -23,18 +26,21 @@ public class ApiController {
     @Autowired
     private RedisWriterService redisWriter;
 
+    @Autowired
+    private MessageDao messageDao;
+
     private static final Logger logger = LoggerFactory.getLogger(ApiController.class);
 
-    @ResponseBody
     @RequestMapping(value="/sendRequest", method= RequestMethod.POST)
-    public String sendMessage(@RequestBody MessageModel messageBody) {
+    public Map sendMessage(@RequestBody MessageModel messageBody) {
 
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
         MessageModel message = new MessageModel(
                 messageBody.getMessage(),
                 messageBody.getRandom(),
-                messageBody.getTimestamp()
+                messageBody.getTimestamp(),
+                -1
         );
 
         logger.info("Message " + messageBody.getMessage() + " sent to api at " + timestamp.toString());
@@ -52,18 +58,32 @@ public class ApiController {
 
         }
 
-        return "Request Received!";
+        Map response = new HashMap<String, String>();
+        response.put("success", "Request Received!");
+        response.put("error", "false");
+
+        return response;
 
     }
 
-    @ResponseBody
+    @RequestMapping(value="/getAll", method= RequestMethod.GET, produces = "application/json")
+    public List<Map<String, Object>> sendMessage(@RequestParam(value = "page", required = false, defaultValue = "0") int page) {
+
+        return messageDao.getAll(page);
+
+    }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public String handle(HttpMessageNotReadableException e) {
+    @ExceptionHandler({HttpMessageNotReadableException.class, NumberFormatException.class})
+    public Map handle(Exception e) {
 
-        logger.error("HttpMessageNotReadableException occurred.", e);
+        logger.error(e.getClass().getCanonicalName() + " occurred!", e);
 
-        return "Bad Request!";
+        Map response = new HashMap<String, String>();
+        response.put("success", "false");
+        response.put("error", "Bad Request!");
+
+        return response;
 
     }
 
