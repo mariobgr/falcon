@@ -17,6 +17,7 @@ public class MessageSenderService {
 
     @Autowired
     RabbitTemplate rabbitTemplate;
+
     private static final Logger logger = LoggerFactory.getLogger(MessageSenderService.class);
 
     public MessageSenderService(RabbitTemplate rabbitTemplate) {
