@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,9 @@ public class MessageSenderService {
     @Autowired
     RabbitTemplate rabbitTemplate;
 
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+
     private static final Logger logger = LoggerFactory.getLogger(MessageSenderService.class);
 
     public MessageSenderService(RabbitTemplate rabbitTemplate) {
@@ -29,10 +33,12 @@ public class MessageSenderService {
 
         Random rand = new Random();
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        long unixTimestamp = System.currentTimeMillis() / 1000L;
 
-        MessageModel message = new MessageModel("This is a message", rand.nextInt(), timestamp.toString(), -1);
+        MessageModel message = new MessageModel("This is an automated message", rand.nextInt(100), Long.toString(unixTimestamp), -1);
 
         rabbitTemplate.convertAndSend(RabbitConfig.EXCHANGE_TOPIC_NAME, RabbitConfig.EXCHANGE_KEY_NAME, message);
+        messagingTemplate.convertAndSend("/topic/falcon", message.toString());
 
         logger.info("Message automatically sent at " + timestamp.toString());
 

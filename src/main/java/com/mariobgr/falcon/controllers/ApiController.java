@@ -43,7 +43,7 @@ public class ApiController {
                 -1
         );
 
-        logger.info("Message " + messageBody.getMessage() + " sent to api at " + timestamp.toString());
+        logger.info("Message " + messageBody.getMessage() + " sent to API at " + timestamp.toString());
 
         if(rabbitWriter.addRecord(message)) {
 
@@ -68,6 +68,8 @@ public class ApiController {
 
     @RequestMapping(value="/getAll", method= RequestMethod.GET, produces = "application/json")
     public List<Map<String, Object>> sendMessage(@RequestParam(value = "page", required = false, defaultValue = "0") int page) {
+
+        page = Math.max(0, page - 1);
 
         return messageDao.getAll(page);
 
