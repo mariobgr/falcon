@@ -2,6 +2,7 @@ package com.mariobgr.falcon.dao;
 
 import com.mariobgr.falcon.models.MessageModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
@@ -19,8 +20,8 @@ public class MessageDao extends JdbcDaoSupport implements GenericDao {
     private MessageSourceAccessor msa;
 
     @Autowired
-    public MessageDao(DataSource dataSource, JdbcTemplate jdbcTemplate) {
-        jdbcTemplate = new JdbcTemplate(dataSource);
+    public MessageDao(@Qualifier("dataSource") DataSource dataSource) {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         setJdbcTemplate(jdbcTemplate);
     }
 

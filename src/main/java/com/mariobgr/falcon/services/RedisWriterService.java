@@ -20,7 +20,7 @@ public class RedisWriterService {
 
         try {
 
-            ValueOperations values = redisTemplate.opsForValue();
+            ValueOperations<String, Object> values = redisTemplate.opsForValue();
             values.set(message.getTimestamp() + ":" + message.getRandom(), message.toString());
 
             return true;

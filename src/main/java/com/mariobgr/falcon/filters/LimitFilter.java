@@ -17,19 +17,19 @@ public class LimitFilter implements Filter {
 
     private int limit = 10;
     private int count;
+    private Object lock = new Object();
     private static final Logger logger = LoggerFactory.getLogger(LimitFilter.class);
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse  response,
-                         FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse  response, FilterChain chain) throws IOException, ServletException {
 
         try {
 
             boolean ok;
 
-            increment();
-
-            ok = count < limit;
+            synchronized (lock) {
+                ok = count++ < limit;
+            }
 
             if (ok) {
 
@@ -39,16 +39,17 @@ public class LimitFilter implements Filter {
 
                 HttpServletResponse res = (HttpServletResponse)response;
                 res.setStatus(429);
-                logger.error("Too many requests from IP " + request.getRemoteAddr());
+                logger.error("Too many requests for IP " + request.getRemoteAddr());
 
             }
 
         } finally {
 
-            decrement();
+            synchronized (lock) {
+                count--;
+            }
 
         }
-
     }
 
     @Override
@@ -58,7 +59,7 @@ public class LimitFilter implements Filter {
     }
 
     @Override
-    public void init(FilterConfig arg0) throws ServletException {
+    public void init(FilterConfig arg0) {
         // TODO Auto-generated method stub
 
     }

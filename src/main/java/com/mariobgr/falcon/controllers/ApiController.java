@@ -58,7 +58,7 @@ public class ApiController {
 
         }
 
-        Map response = new HashMap<String, String>();
+        Map<String, String> response = new HashMap<>();
         response.put("success", "Request Received!");
         response.put("error", "false");
 
@@ -81,7 +81,7 @@ public class ApiController {
 
         logger.error(e.getClass().getCanonicalName() + " occurred!", e);
 
-        Map response = new HashMap<String, String>();
+        Map<String, String> response = new HashMap<>();
         response.put("success", "false");
         response.put("error", "Bad Request!");
 

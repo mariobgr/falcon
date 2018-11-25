@@ -11,7 +11,7 @@ public class MessagingController {
 
     @MessageMapping("/message")
     @SendTo("/topic/falcon")
-    public MessageModel send(@RequestBody MessageModel messageBody) throws Exception {
+    public MessageModel send(@RequestBody MessageModel messageBody) {
 
         return messageBody;
     }
