@@ -1,5 +1,6 @@
 package com.mariobgr.falcon.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,13 +16,25 @@ import javax.sql.DataSource;
 @EnableAutoConfiguration
 public class DataSourceConfig {
 
+    @Value("${spring.mysql.host}")
+    private String mysqlHost;
+
+    @Value("${spring.mysql.db}")
+    private String mysqlDb;
+
+    @Value("${spring.mysql.user}")
+    private String mysqlUser;
+
+    @Value("${spring.mysql.pass}")
+    private String mysqlPass;
+
     @Bean
     public DataSource dataSource() {
 
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setUrl("jdbc:mysql://localhost/falcondb");
-        dataSource.setUsername("falcon");
-        dataSource.setPassword("falcon123"); //
+        dataSource.setUrl("jdbc:mysql://" + mysqlHost + "/" + mysqlDb);
+        dataSource.setUsername(mysqlUser);
+        dataSource.setPassword(mysqlPass);
 
         return dataSource;
     }

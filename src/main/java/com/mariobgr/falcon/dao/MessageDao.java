@@ -73,7 +73,7 @@ public class MessageDao extends JdbcDaoSupport implements GenericDao {
     @Override
     public void delete(Object o) {
 
-        MessageModel message = (MessageModel) o;
+        MessageModel message = MessageModel.class.cast(o);
 
         String sql = msa.getMessage("sql.delete.message");
         Object[] args = new Object[] { message.getId() };

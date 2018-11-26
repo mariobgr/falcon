@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import javax.servlet.http.HttpServletResponse;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +34,7 @@ public class ApiController {
     private static final Logger logger = LoggerFactory.getLogger(ApiController.class);
 
     @RequestMapping(value="/sendRequest", method= RequestMethod.POST)
-    public Map sendMessage(@RequestBody MessageModel messageBody) {
+    public Map sendMessage(@RequestBody MessageModel messageBody, HttpServletResponse httpResponse) {
 
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
@@ -58,6 +60,8 @@ public class ApiController {
 
         }
 
+        httpResponse.setStatus(HttpServletResponse.SC_CREATED);
+
         Map<String, String> response = new HashMap<>();
         response.put("success", "Request Received!");
         response.put("error", "false");
@@ -76,7 +80,7 @@ public class ApiController {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({HttpMessageNotReadableException.class, NumberFormatException.class})
+    @ExceptionHandler({HttpMessageNotReadableException.class, NumberFormatException.class, MethodArgumentTypeMismatchException.class})
     public Map handle(Exception e) {
 
         logger.error(e.getClass().getCanonicalName() + " occurred!", e);

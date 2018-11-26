@@ -8,10 +8,10 @@ import java.io.Serializable;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MessageModel implements Serializable {
 
-    public Integer id;
-    public String message;
-    public int random;
-    public String timestamp;
+    private final Integer id;
+    private final String message;
+    private final int random;
+    private final String timestamp;
 
     public MessageModel(@JsonProperty("message") String message,
                         @JsonProperty("random") int random,

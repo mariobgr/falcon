@@ -2,7 +2,6 @@ package com.mariobgr.falcon.services;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mariobgr.falcon.config.RabbitConfig;
 import com.mariobgr.falcon.dao.MessageDao;
 import com.mariobgr.falcon.models.MessageModel;
 import org.slf4j.Logger;
@@ -20,7 +19,7 @@ public class MessageReceiverService {
 
     private static final Logger logger = LoggerFactory.getLogger(MessageReceiverService.class);
 
-    @RabbitListener(queues = RabbitConfig.EXCHANGE_QUEUE_NAME)
+    @RabbitListener(queues = "${spring.rabbit.queue}")
     public void consumeMessage(Message message) {
 
         try {

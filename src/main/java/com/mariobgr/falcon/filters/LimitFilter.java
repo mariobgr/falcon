@@ -15,9 +15,9 @@ import java.io.IOException;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class LimitFilter implements Filter {
 
-    private int limit = 10;
+    private final int limit = 10;
     private int count;
-    private Object lock = new Object();
+    private final Object lock = new Object();
     private static final Logger logger = LoggerFactory.getLogger(LimitFilter.class);
 
     @Override

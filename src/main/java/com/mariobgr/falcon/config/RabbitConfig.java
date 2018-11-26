@@ -16,9 +16,9 @@ import org.springframework.context.annotation.Configuration;
 @EnableAutoConfiguration
 public class RabbitConfig {
 
-    public static final String EXCHANGE_TOPIC_NAME = "falcon_topic";
-    public static final String EXCHANGE_QUEUE_NAME = "falcon_queue";
-    public static final String EXCHANGE_KEY_NAME = "f@lconRockz";
+    public static final String EXCHANGE_TOPIC_NAME = "${spring.rabbit.topic}";
+    public static final String EXCHANGE_QUEUE_NAME = "${spring.rabbit.queue}";
+    public static final String EXCHANGE_KEY_NAME = "${spring.rabbit.key}";
 
 
     @Bean
