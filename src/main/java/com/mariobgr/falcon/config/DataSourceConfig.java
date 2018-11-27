@@ -32,7 +32,7 @@ public class DataSourceConfig {
     public DataSource dataSource() {
 
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setUrl("jdbc:mysql://" + mysqlHost + "/" + mysqlDb);
+        dataSource.setUrl("jdbc:mysql://" + mysqlHost + "/" + mysqlDb + "?useUnicode=true&characterEncoding=UTF-8");
         dataSource.setUsername(mysqlUser);
         dataSource.setPassword(mysqlPass);
 

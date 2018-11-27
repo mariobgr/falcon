@@ -1,5 +1,7 @@
 # Falcon Test Task
 
+[![Build Status](https://travis-ci.org/mariobgr/falcon.svg?branch=master)](https://travis-ci.org/mariobgr/falcon)
+
 This project is a test task - mostly just to get acquainted with some new technologies. It includes a few major components:
 
   - SpringBoot
@@ -36,6 +38,7 @@ There are a few things I would like to point out, since I decided they would be 
   - I was very amazed to find out that RESTful APIs should return HTTP Status **201 CREATED** when successfully inserting object(s). I modified my method to do so.
 
 ~~The only part I decided not to commit is the tests. I gave them a try, just to complete every single point in the task... but it did not work out very well. My imagination got lazy like a programmer after a big lunch and I came up with only 3 lame tests. It would be nice if I give them a bit more attention in the future.~~
+
 Last commit took care of the tests. Minor changes in the code were required for the tests to run as expected. Came up with **7** tests (and **7** is my favorite number)!
 
 ### Last words

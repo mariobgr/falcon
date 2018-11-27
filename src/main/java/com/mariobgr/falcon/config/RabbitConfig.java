@@ -7,6 +7,7 @@ import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,24 +17,30 @@ import org.springframework.context.annotation.Configuration;
 @EnableAutoConfiguration
 public class RabbitConfig {
 
-    public static final String EXCHANGE_TOPIC_NAME = "${spring.rabbit.topic}";
-    public static final String EXCHANGE_QUEUE_NAME = "${spring.rabbit.queue}";
-    public static final String EXCHANGE_KEY_NAME = "${spring.rabbit.key}";
+    @Value("${spring.rabbit.topic}")
+    private String rabbitTopic;
+
+    @Value("${spring.rabbit.queue}")
+    private String rabbitQueue;
+
+    @Value("${spring.rabbit.key}")
+    private String rabbitKey;
+
 
 
     @Bean
     public TopicExchange exchangeTopic() {
-        return new TopicExchange(EXCHANGE_TOPIC_NAME);
+        return new TopicExchange(rabbitTopic);
     }
 
     @Bean
     public Queue exchangeQueue() {
-        return new Queue(EXCHANGE_QUEUE_NAME);
+        return new Queue(rabbitQueue);
     }
 
     @Bean
     public Binding exchangeBinding() {
-        return BindingBuilder.bind(exchangeQueue()).to(exchangeTopic()).with(EXCHANGE_KEY_NAME);
+        return BindingBuilder.bind(exchangeQueue()).to(exchangeTopic()).with(rabbitKey);
     }
 
     @Bean

@@ -1,11 +1,11 @@
 package com.mariobgr.falcon.services;
 
-import com.mariobgr.falcon.config.RabbitConfig;
 import com.mariobgr.falcon.models.MessageModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -15,6 +15,12 @@ import java.util.Random;
 
 @Service
 public class MessageSenderService {
+
+    @Value("${spring.rabbit.topic}")
+    private String rabbitTopic;
+
+    @Value("${spring.rabbit.key}")
+    private String rabbitKey;
 
     @Autowired
     RabbitTemplate rabbitTemplate;
@@ -37,7 +43,7 @@ public class MessageSenderService {
 
         MessageModel message = new MessageModel("This is an automated message", rand.nextInt(100), Long.toString(unixTimestamp), -1);
 
-        rabbitTemplate.convertAndSend(RabbitConfig.EXCHANGE_TOPIC_NAME, RabbitConfig.EXCHANGE_KEY_NAME, message);
+        rabbitTemplate.convertAndSend(rabbitTopic, rabbitKey, message);
         messagingTemplate.convertAndSend("/topic/falcon", message.toString());
 
         logger.info("Message automatically sent at " + timestamp.toString());

@@ -1,16 +1,22 @@
 package com.mariobgr.falcon.services;
 
-import com.mariobgr.falcon.config.RabbitConfig;
 import com.mariobgr.falcon.models.MessageModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 public class RabbitWriterService {
+
+    @Value("${spring.rabbit.topic}")
+    private String rabbitTopic;
+
+    @Value("${spring.rabbit.key}")
+    private String rabbitKey;
 
     @Autowired
     RabbitTemplate rabbitTemplate;
@@ -24,7 +30,7 @@ public class RabbitWriterService {
 
         try {
 
-            rabbitTemplate.convertAndSend(RabbitConfig.EXCHANGE_TOPIC_NAME, RabbitConfig.EXCHANGE_KEY_NAME, message);
+            rabbitTemplate.convertAndSend(rabbitTopic, rabbitKey, message);
             messagingTemplate.convertAndSend("/topic/falcon", message.toString());
 
             return true;
